@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Numerology</string>
+
+
+    <string name="ppl_list_title"> </string>
+    <string name="add_person">Add</string>
+    <string name="name">Name</string>
+    <string name="note">Note</string>
+    <string name="save_note">Save note</string>
+    <string name="delete_all">Delete all</string>
+    <string name="name_filter">Filter by name</string>
+    <string name="note_filter">Filter by note</string>
+    <string name="favorite_first">Favorite first</string>
+    <string name="pythagorean_matrix">Pythagorean square</string>
+    <string name="no_numbers">\u2014</string>
+    <string name="warning_delete_person">Person is about to be deleted</string>
+    <string name="warning_delete_photo">Photo is about to be deleted</string>
+    <string name="warning_delete_all">All the data is about to be deleted!</string>
+    <string name="ok">OK</string>
+    <string name="apply">Apply</string>
+    <string name="filter_by_name">Filter by name ignorecase</string>
+    <string name="filter_by_note">Filter by note</string>
+
+</resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/peopleListFragmentId"
+    >
+
+    <fragment
+        android:id="@+id/peopleListFragmentId"
+        android:name="com.alexthekap.numerology2_appp.ui.people.PeopleListFragment"
+        android:label="@string/ppl_list_title"
+        tools:layout="@layout/fragment_people_list"
+        />
+
+    <fragment
+        android:id="@+id/addPersonFragmentId"
+        android:name="com.alexthekap.numerology2_appp.ui.people.NewPersonFragment"
+        android:label="@string/add_person"
+        tools:layout="@layout/fragment_new_person"
+        />
+
+    <fragment
+        android:id="@+id/personDetailsFragmentId"
+        android:name="com.alexthekap.numerology2_appp.ui.people.details.PersonDetailsFragment"
+        android:label="{arg_person_name_from_db}"
+        tools:layout="@layout/fragment_person_details"
+        >
+        <argument
+            android:name="arg_person_name_from_db"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/pythagoreanMatrixFragmentId"
+        android:name="com.alexthekap.numerology2_appp.ui.people.details.PythagoreanMatrixFragment"
+        android:label="@string/name"
+        tools:layout="@layout/fragment_pythagorean_matrix"
+        />
+
+    <fragment
+        android:id="@+id/noteEditFragmentId"
+        android:name="com.alexthekap.numerology2_appp.ui.people.details.NoteEditFragment"
+        android:label="@string/note"
+        tools:layout="@layout/fragment_note_edit"
+        />
+
+    <dialog
+        android:id="@+id/nameEditBottomFragmentId"
+        android:name="com.alexthekap.numerology2_appp.ui.people.details.NameEditBottomFragment"
+        android:label="@string/name"
+        tools:layout="@layout/fragment_name_edit"
+        />
+
+    <dialog
+        android:id="@+id/oneFieldBottomFragmentId"
+        android:name="com.alexthekap.numerology2_appp.ui.people.filter.OneFieldBottomFragment"
+        android:label=""
+        tools:layout="@layout/fragment_one_field_bottom"
+        />
+
+</navigation>

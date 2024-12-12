@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <item
+        android:id="@+id/item_name_filter"
+        android:title="@string/name_filter"
+        />
+
+    <item
+        android:id="@+id/item_note_filter"
+        android:title="@string/note_filter"
+        />
+
+    <item
+        android:id="@+id/item_favorite_first"
+        android:checkable="true"
+        android:title="@string/favorite_first"
+        />
+
+    <item
+        android:id="@+id/item_delete_all"
+        android:title="@string/delete_all"
+        />
+
+</menu>

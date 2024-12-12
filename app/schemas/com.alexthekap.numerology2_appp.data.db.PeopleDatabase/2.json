@@ -1,0 +1,88 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "0bf03e68bb6d37c3c0a3e42091fd1d57",
+    "entities": [
+      {
+        "tableName": "people_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`personName` TEXT NOT NULL, `birthDate` INTEGER NOT NULL, `note` TEXT, `dateAddedMillis` INTEGER NOT NULL, `numberList` TEXT NOT NULL, `dateChangedBirthDate` INTEGER, `zodiac` TEXT, `chineseYear` TEXT, `dbId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `img` BLOB)",
+        "fields": [
+          {
+            "fieldPath": "personName",
+            "columnName": "personName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "birthDate",
+            "columnName": "birthDate",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateAddedMillis",
+            "columnName": "dateAddedMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numberList",
+            "columnName": "numberList",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateChangedBirthDate",
+            "columnName": "dateChangedBirthDate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "zodiac",
+            "columnName": "zodiac",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "chineseYear",
+            "columnName": "chineseYear",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dbId",
+            "columnName": "dbId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "img",
+            "columnName": "img",
+            "affinity": "BLOB",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "dbId"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0bf03e68bb6d37c3c0a3e42091fd1d57')"
+    ]
+  }
+}

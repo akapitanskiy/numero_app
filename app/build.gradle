@@ -1,0 +1,74 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    id 'kotlin-kapt'
+    id 'androidx.room'
+}
+
+android {
+    namespace 'com.alexthekap.numerology2_appp'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.alexthekap.numerology2_appp"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    room {
+        schemaDirectory "$projectDir/schemas"
+    }
+}
+
+dependencies {
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.activity
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+
+    implementation libs.circleimageview
+    implementation libs.gson
+
+    // dagger
+    def dagger_version = "2.52"
+    implementation libs.dagger
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+
+    // room
+    implementation libs.androidx.room.runtime
+    kapt "androidx.room:room-compiler:$room_version"
+    // rx for Room
+    implementation libs.androidx.room.rxjava2
+
+    // rx java
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation libs.rxjava
+
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+}
