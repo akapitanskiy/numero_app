@@ -6,25 +6,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.alexthekap.numerology2_appp.R
-import com.alexthekap.numerology2_appp.util.Utils
 import com.alexthekap.numerology2_appp.data.db.model.PersonModel
 import com.alexthekap.numerology2_appp.databinding.ItemPersonBinding
 import com.alexthekap.numerology2_appp.ui.people.details.ARG_PERSON_DB_ID
 import com.alexthekap.numerology2_appp.ui.people.details.ARG_PERSON_DB_NAME
 import com.alexthekap.numerology2_appp.util.ChineseYear
+import com.alexthekap.numerology2_appp.util.Utils
 import com.alexthekap.numerology2_appp.util.Zodiac
-import com.alexthekap.numerology2_appp.util.ZodiacEnum
-import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class PersonAdapter : ListAdapter<PersonModel, PersonAdapter.ItemViewHolder>(DIFF_CALLBACK) {

@@ -1,12 +1,10 @@
 package com.alexthekap.numerology2_appp.ui.people.details
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
 import com.alexthekap.numerology2_appp.R
 import com.alexthekap.numerology2_appp.databinding.FragmentPythagoreanMatrixBinding
-import com.alexthekap.numerology2_appp.di.ComponentManager
 import com.alexthekap.numerology2_appp.ui.MainActivity
 import com.alexthekap.numerology2_appp.ui.ViewModelFactory
 import com.alexthekap.numerology2_appp.util.Matrix
@@ -44,14 +42,14 @@ class PythagoreanMatrixFragment : Fragment(R.layout.fragment_pythagorean_matrix)
 //        personDetailsViewModel = ViewModelProvider(requireActivity(), vmFactory).get(PersonDetailsViewModel::class.java)
 
         birthDateMillis?.let{
-            fillMatrixFields( Matrix(it), Matrix2(it), Matrix3(it) )
+            fillOutMatrixFields( Matrix(it), Matrix2(it), Matrix3(it) )
             b.birthDateMatrix.setText( Utils.longToStrDate(it) )
         }
 
         name?.let{ (requireActivity() as MainActivity).supportActionBar?.title = it }
     }
 
-    private fun fillMatrixFields(matrix: Matrix, matrix2: Matrix2, matrix3: Matrix3) {
+    private fun fillOutMatrixFields(matrix: Matrix, matrix2: Matrix2, matrix3: Matrix3) {
         if (matrix._1s.isNotEmpty()) { b.txtOf1s.setText(matrix._1s) }
         if (matrix._2s.isNotEmpty()) { b.txtOf2s.setText(matrix._2s) }
         if (matrix._3s.isNotEmpty()) { b.txtOf3s.setText(matrix._3s) }

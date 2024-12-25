@@ -20,5 +20,7 @@
     <string name="apply">Apply</string>
     <string name="filter_by_name">Filter by name ignorecase</string>
     <string name="filter_by_note">Filter by note</string>
+    <string name="filter_name_template">name: %s</string>
+    <string name="filter_note_template">note: %s</string>
 
 </resources>

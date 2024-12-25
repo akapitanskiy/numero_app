@@ -8,6 +8,7 @@ import com.alexthekap.numerology2_appp.R
 import com.alexthekap.numerology2_appp.databinding.FragmentOneFieldBottomBinding
 import com.alexthekap.numerology2_appp.di.ComponentManager
 import com.alexthekap.numerology2_appp.ui.ViewModelFactory
+import com.alexthekap.numerology2_appp.ui.people.ARG_SEARCH_TEXT
 import com.alexthekap.numerology2_appp.ui.people.PeopleViewModel
 import com.alexthekap.numerology2_appp.util.TxtChangeListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -53,15 +54,29 @@ class OneFieldBottomFragment : BottomSheetDialogFragment(R.layout.fragment_one_f
             ARG_NAME_FILTER -> {
                 b.singleFieldTitle.setText(R.string.filter_by_name)
                 b.applyBtnSingleFieldFilter.setOnClickListener{
-                    viewModel.filterByName(b.singleFieldText.text?.toString())
-                    findNavController().navigate(R.id.peopleListFragmentId)
+                    val text = b.singleFieldText.text?.toString()
+                    val templateResID = R.string.filter_name_template
+                    viewModel.filterByName(text, templateResID)
+                    findNavController().navigate(
+                        R.id.peopleListFragmentId,
+                        Bundle().apply{
+                            putString( ARG_SEARCH_TEXT, getString(templateResID, text?.trim()) )
+                        }
+                    )
                 }
             }
             ARG_NOTE_FILTER -> {
                 b.singleFieldTitle.setText(R.string.filter_by_note)
                 b.applyBtnSingleFieldFilter.setOnClickListener{
-                    viewModel.filterByNote(b.singleFieldText.text?.toString())
-                    findNavController().navigate(R.id.peopleListFragmentId)
+                    val text = b.singleFieldText.text?.toString()
+                    val templateResID = R.string.filter_note_template
+                    viewModel.filterByNote(text, templateResID)
+                    findNavController().navigate(
+                        R.id.peopleListFragmentId,
+                        Bundle().apply{
+                            putString( ARG_SEARCH_TEXT, getString(templateResID, text?.trim()) )
+                        }
+                    )
                 }
             }
         }

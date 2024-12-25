@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
@@ -9,9 +10,18 @@
     <fragment
         android:id="@+id/peopleListFragmentId"
         android:name="com.alexthekap.numerology2_appp.ui.people.PeopleListFragment"
-        android:label="@string/ppl_list_title"
+        android:label="{arg_search_text}"
         tools:layout="@layout/fragment_people_list"
-        />
+        >
+        <argument
+            android:name="arg_search_text"
+            app:argType="string"
+            android:defaultValue=" "
+            />
+<!--        <argument-->
+<!--            app:nullable="true"-->
+<!--            />-->
+    </fragment>
 
     <fragment
         android:id="@+id/addPersonFragmentId"
@@ -28,7 +38,8 @@
         >
         <argument
             android:name="arg_person_name_from_db"
-            app:argType="string" />
+            app:argType="string"
+            />
     </fragment>
 
     <fragment

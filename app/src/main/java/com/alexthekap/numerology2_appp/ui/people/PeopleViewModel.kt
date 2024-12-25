@@ -28,6 +28,7 @@ class PeopleViewModel @Inject constructor(
 
     private val TAG = this::class.java.simpleName
     private val peopleLD = MutableLiveData<List<PersonModel>>()
+    private val searchTextLD = MutableLiveData< Pair<Int,String>? >()
     private val sortedFavoriteLD = MutableLiveData(false)
 
     private fun getPeopleAndObserveDb() {
@@ -60,7 +61,7 @@ class PeopleViewModel @Inject constructor(
             .also{ disposable.add(it) }
     }
 
-    fun filterByName(name: String?) {
+    fun filterByName(name: String?, rID: Int) {
         name ?: return
         repository.filterByName(name.trim())
             .subscribeOn(Schedulers.io())
@@ -68,13 +69,14 @@ class PeopleViewModel @Inject constructor(
                 {
                     Log.d(TAG, "filterByName: filtered ${it.size} items")
                     peopleLD.postValue(it)
+                    searchTextLD.postValue( Pair(rID, name) )
                 },
                 { Log.d(TAG, "filterByName: ERROR ${it.message}")}
             )
             .also{ disposable.add(it) }
     }
 
-    fun filterByNote(note: String?) {
+    fun filterByNote(note: String?, rID: Int) {
         note ?: return
         repository.filterByNote(note.trim())
             .subscribeOn(Schedulers.io())
@@ -82,6 +84,7 @@ class PeopleViewModel @Inject constructor(
                 {
                     Log.d(TAG, "filterByNote: filtered ${it.size} items")
                     peopleLD.postValue(it)
+                    searchTextLD.postValue( Pair(rID, note) )
                 },
                 { Log.d(TAG, "filterByNote: ERROR ${it.message}")}
             )
@@ -110,6 +113,7 @@ class PeopleViewModel @Inject constructor(
 
     fun reload() {
         getPeopleAndObserveDb()
+        searchTextLD.postValue( null )
     }
 
     fun insertPerson(year: Int, month: Int, day: Int, name: String?, note: String?, nav: NavController) {
@@ -136,9 +140,7 @@ class PeopleViewModel @Inject constructor(
                             putLong(ARG_BIRTHDAY_DATE, birthdateMillis)
                             putString(ARG_PERSON_NAME, name)
                         },
-                        NavOptions.Builder()
-                            .setPopUpTo(R.id.peopleListFragmentId, false)
-                            .build()
+                        NavOptions.Builder().setPopUpTo(R.id.peopleListFragmentId, false).build()
                     )
                 },
                 { Log.d(TAG, "insert error: ${it.message}") }
@@ -155,6 +157,10 @@ class PeopleViewModel @Inject constructor(
 
     fun getSortedFavoriteLD(): LiveData<Boolean> {
         return sortedFavoriteLD
+    }
+
+    fun getSearchTextLd(): LiveData< Pair<Int,String>? > {
+        return searchTextLD
     }
 
     override

@@ -5,7 +5,6 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -36,9 +35,8 @@ import com.alexthekap.numerology2_appp.util.Zodiac
 import java.util.Calendar
 import javax.inject.Inject
 
-
 const val ARG_PERSON_DB_ID = "arg_person_dbId"
-const val ARG_PERSON_DB_NAME = "arg_person_name_from_db" // !dynamic arg name in nav_graph DON'T change
+const val ARG_PERSON_DB_NAME = "arg_person_name_from_db" // !dynamic arg name in nav_graph, DON'T change  иначе при скрытии BottomSheetDialog имя не сохраняется
 
 class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
 
@@ -50,6 +48,8 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
     private var dbId: Long? = null
     private var mPerson: PersonModel? = null
     private lateinit var activityResultGallery: ActivityResultLauncher<Intent>
+
+    private val onPictureLongClickDialog by lazy { createOnPictureLongClickDialog() }
 
     private val permissionRequestLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
@@ -84,6 +84,8 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
         }
 
         requireActivity().addMenuProvider(menuProvider, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        (requireActivity() as MainActivity).supportActionBar?.title = savedInstanceState?.getString("Title")
     }
 
     private fun handlePersonData(person: PersonModel?) {
@@ -169,40 +171,47 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
         b.isFavoriteImg.setOnClickListener{ detailsViewModel.onFavoriteClick() }
 
         b.addPicImg.setOnClickListener{
-            if ( !checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ) {
+            if ( !checkPermission() ) {
                 permissionRequestLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             } else {
                 activityResultGallery.launch( Intent(Intent.ACTION_PICK).apply{ setType("image/*") } )
             }
         }
 
-        b.pictureImg.setOnClickListener{
-            if ( !checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE) ) {
-                permissionRequestLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            } else {
-                activityResultGallery.launch( Intent(Intent.ACTION_PICK).apply{ setType("image/*") } )
-            }
-        }
+//        b.pictureImg.setOnClickListener{
+//            if ( !checkPermission() ) {
+//                permissionRequestLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+//            } else {
+//                activityResultGallery.launch( Intent(Intent.ACTION_PICK).apply{ setType("image/*") } )
+//            }
+//        }
 
         b.pictureImg.setOnLongClickListener{
-            val builder = AlertDialog.Builder(requireContext())
-            val spanString = SpannableString(getString(R.string.warning_delete_photo))
-            spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.warning)), 0, spanString.length, 0 )
-            builder.setTitle(spanString)
-            builder.setMessage(" ")
-
-            builder.setPositiveButton(R.string.ok) { _, _ ->
-                detailsViewModel.removePhoto(dbId)
-            }
-            builder.setNegativeButton("Cancel        ") { _, _ -> }
-            builder.setOnCancelListener{ }
-            builder.show()
+            onPictureLongClickDialog.show()
             return@setOnLongClickListener true
         }
     }
 
-    private fun checkPermission(permission: String): Boolean {
-        return ContextCompat.checkSelfPermission( requireContext(), permission ) == PackageManager.PERMISSION_GRANTED
+    private fun checkPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun createOnPictureLongClickDialog(): AlertDialog.Builder {
+        val spanString = SpannableString(getString(R.string.warning_delete_photo))
+        spanString.setSpan( ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.warning)), 0, spanString.length, 0 )
+
+        val builder = AlertDialog.Builder(requireContext())
+            .setTitle(spanString)
+            .setMessage(" ")
+            .setPositiveButton(R.string.ok) { _, _ ->
+                detailsViewModel.removePhoto(dbId)
+            }
+            .setNegativeButton("Cancel       ") { _, _ -> }
+
+        return builder
     }
 
     private val menuProvider = object : MenuProvider {
@@ -227,6 +236,11 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
                 else -> false
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("Title", mPerson?.personName)
     }
 
     override
