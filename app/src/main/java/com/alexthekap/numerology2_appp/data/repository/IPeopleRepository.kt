@@ -23,7 +23,7 @@ interface IPeopleRepository {
 
     fun updateBirthdate(id: Long, bDateMillis: Long): Single<Int>
 
-    fun updateImage(id: Long, imageArray: ByteArray?): Single<Int>
+    fun updateImage(id: Long, imageArray: ByteArray?, orientation: Int?): Single<Int>
 
     fun updateIsFavorite(id: Long, isFavorite: Boolean): Single<Int>
 

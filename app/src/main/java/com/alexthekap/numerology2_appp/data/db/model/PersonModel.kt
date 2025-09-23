@@ -2,7 +2,6 @@ package com.alexthekap.numerology2_appp.data.db.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -28,7 +27,9 @@ data class PersonModel(
     var chineseYear: String? = null,
 
     @ColumnInfo(defaultValue = "false")
-    var isFavorite: Boolean = false
+    var isFavorite: Boolean = false,
+
+    val imgOrientation: Int? = null
 
 ) {
     @PrimaryKey(autoGenerate = true)

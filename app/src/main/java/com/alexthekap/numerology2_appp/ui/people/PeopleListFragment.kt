@@ -73,7 +73,6 @@ class PeopleListFragment : Fragment(R.layout.fragment_people_list) {
         adapter.submitList(people)
     }
 
-
     private fun handleSortedFavorite(sorted: Boolean?) {
         menuItemSorted?.isChecked = (sorted == true)
     }

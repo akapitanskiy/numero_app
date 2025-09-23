@@ -37,13 +37,13 @@ interface PeopleDao {
     fun updateName(name: String?, id: Long): Single<Int>
 
     @Query("UPDATE people_table SET birthDate = :bDate, dateChangedBirthDate = :changedAt WHERE dbId = :id")
-    fun updateBDate(bDate: Long, id: Long, changedAt: Long): Single<Int>
+    fun updateBirthDate(bDate: Long, id: Long, changedAt: Long): Single<Int>
 
     @Query("UPDATE people_table SET isFavorite = :favorite WHERE dbId = :id")
     fun updateIsFavorite(favorite: Boolean, id: Long): Single<Int>
 
-    @Query("UPDATE people_table SET img = :imgByteArr WHERE dbId = :id")
-    fun updateImg(imgByteArr: ByteArray?, id: Long): Single<Int>
+    @Query("UPDATE people_table SET img = :imgByteArr, imgOrientation = :orientation WHERE dbId = :id")
+    fun updateImg(imgByteArr: ByteArray?, id: Long, orientation: Int?): Single<Int>
 
     @Query("SELECT * FROM people_table WHERE personName LIKE :name ORDER BY dbId DESC")
     fun getPeopleWithName(name: String): Flowable<List<PersonModel>>

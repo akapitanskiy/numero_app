@@ -1,14 +1,17 @@
 package com.alexthekap.numerology2_appp.ui.people.details
 
 import android.content.Context
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
+import com.alexthekap.numerology2_appp.App
 import com.alexthekap.numerology2_appp.R
 import com.alexthekap.numerology2_appp.data.db.model.PersonModel
 import com.alexthekap.numerology2_appp.data.repository.IPeopleRepository
@@ -101,18 +104,26 @@ class PersonDetailsViewModel @Inject constructor(
     fun onFileObtained(uri: Uri?, context: Context, dbId: Long?) {
         uri ?: return
         dbId ?: return
-        repository.updateImage(dbId, readBytes(uri, context))
+        val imageByteArray = readBytes(uri, context)
+        if (imageByteArray != null && imageByteArray.size * 1.0F /1024/1024 > 3.99) {
+            Toast.makeText(App.inst.baseContext, R.string.image_too_big, Toast.LENGTH_LONG).show()
+            return
+        }
+        repository.updateImage(dbId, imageByteArray, readOrientation(uri, context))
             .subscribeOn(Schedulers.io())
             .subscribe(
                 { Log.d(TAG, "updateImage: updated $it") },
-                { Log.d(TAG, "updateImage: ERROR ${it.message}") }
+                {
+                    Log.d(TAG, "updateImage: ERROR ${it.message}")
+                    Toast.makeText(App.inst.baseContext, R.string.insert_image_err, Toast.LENGTH_LONG).show()
+                }
             )
             .also{ disposable.add(it) }
     }
 
     fun removePhoto(dbId: Long?) {
         dbId ?: return
-        repository.updateImage(dbId, null)
+        repository.updateImage(dbId, null, null)
             .subscribeOn(Schedulers.io())
             .subscribe(
                 { Log.d(TAG, "updateImage: updated $it") },
@@ -146,6 +157,29 @@ class PersonDetailsViewModel @Inject constructor(
         } finally {
             inputStream?.close()
             byteArrayOutputStream?.close()
+        }
+        return null
+    }
+
+    private fun readOrientation(uri: Uri?, context: Context): Int? {
+        uri ?: return null
+        var inputStream: InputStream? = null
+
+        try {
+            inputStream = context.contentResolver.openInputStream(uri)
+
+            if (inputStream != null) {
+                val exif = ExifInterface(inputStream)
+                val orientation = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL
+                )
+                return orientation
+            }
+        } catch (e: IOException) {
+            Log.e(TAG, "readBytes: ERROR", e)
+        } finally {
+            inputStream?.close()
         }
         return null
     }

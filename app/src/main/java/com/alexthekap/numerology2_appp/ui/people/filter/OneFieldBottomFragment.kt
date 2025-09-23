@@ -1,8 +1,6 @@
 package com.alexthekap.numerology2_appp.ui.people.filter
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -51,23 +49,15 @@ class OneFieldBottomFragment : BottomSheetDialogFragment(R.layout.fragment_one_f
     private fun initViews() {
         b.singleFieldText.addTextChangedListener( TxtChangeListener{
             b.applyBtnSingleFieldFilter.isEnabled = it.trim().isNotEmpty()
-        } )
+        })
 
         when(filterType) {
             ARG_NAME_FILTER -> {
                 b.singleFieldTitle.setText(R.string.filter_by_name)
                 b.applyBtnSingleFieldFilter.setOnClickListener{ onApplyClickName() }
-                b.singleFieldText.addTextChangedListener(
-                    object : TextWatcher {
-                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-                        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
-
-                        override fun afterTextChanged(s: Editable?) {
-                            viewModel.filterByName(s.toString(), null)
-                        }
-
-                    }
-                )
+                b.singleFieldText.addTextChangedListener( TxtChangeListener{
+                    viewModel.filterByName(it, null)
+                })
             }
             ARG_NOTE_FILTER -> {
                 b.singleFieldTitle.setText(R.string.filter_by_note)

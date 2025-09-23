@@ -4,7 +4,10 @@ import android.Manifest
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -110,7 +113,12 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
 
         if (person.img != null) {
             b.pictureImg.visibility = View.VISIBLE
-            b.pictureImg.setImageBitmap( BitmapFactory.decodeByteArray(person.img, 0, person.img!!.size) )
+
+            if (person.imgOrientation == ExifInterface.ORIENTATION_NORMAL || person.imgOrientation == null) {
+                b.pictureImg.setImageBitmap( BitmapFactory.decodeByteArray(person.img, 0, person.img!!.size) )
+            } else {
+                b.pictureImg.setImageBitmap( getBitmapOriented(person) )
+            }
             b.addPicImg.visibility = View.GONE
         } else {
             b.addPicImg.visibility = View.VISIBLE
@@ -118,6 +126,20 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
         }
 
         initListeners()
+    }
+
+    private fun getBitmapOriented(person: PersonModel): Bitmap {
+        val matrix = Matrix()
+        when (person.imgOrientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+        }
+        val bitMapFromBytes = BitmapFactory.decodeByteArray(person.img, 0, person.img!!.size)
+
+        return Bitmap.createBitmap(
+            bitMapFromBytes, 0, 0, bitMapFromBytes.width, bitMapFromBytes.height, matrix, true
+        )
     }
 
     private fun initListeners() {

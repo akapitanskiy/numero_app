@@ -48,7 +48,7 @@ class PeopleRepository @Inject constructor(
 
     override
     fun updateBirthdate(id: Long, bDateMillis: Long): Single<Int> {
-        return peopleDao.updateBDate(bDateMillis, id, System.currentTimeMillis())
+        return peopleDao.updateBirthDate(bDateMillis, id, System.currentTimeMillis())
     }
 
     override
@@ -56,8 +56,8 @@ class PeopleRepository @Inject constructor(
         return peopleDao.updateIsFavorite(isFavorite, id)
     }
 
-    override fun updateImage(id: Long, imageArray: ByteArray?): Single<Int> {
-        return peopleDao.updateImg(imageArray, id)
+    override fun updateImage(id: Long, imageArray: ByteArray?, orientation: Int?): Single<Int> {
+        return peopleDao.updateImg(imageArray, id, orientation)
     }
 
     override

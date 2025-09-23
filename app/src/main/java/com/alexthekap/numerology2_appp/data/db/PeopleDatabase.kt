@@ -11,10 +11,10 @@ import com.alexthekap.numerology2_appp.data.db.model.PersonModel
     entities = [
         PersonModel::class
     ],
-    version = 3,
+    version = 4,
     autoMigrations = [
         AutoMigration (from = 2, to = 3),
-//        AutoMigration (from = 3, to = 4)
+        AutoMigration (from = 3, to = 4)
     ]
 )
 @TypeConverters(Converter::class)
