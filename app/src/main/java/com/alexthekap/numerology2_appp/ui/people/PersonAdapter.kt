@@ -34,7 +34,8 @@ class PersonAdapter : ListAdapter<PersonModel, PersonAdapter.ItemViewHolder>(DIF
                 return old.personName == new.personName
                         && old.birthDate == new.birthDate
                         && old.note == new.note
-//                        && oldSong.title?.label    .equals(newSong.title?.label)
+                        && old.isFavorite == new.isFavorite
+                        && old.img.contentEquals(new.img)
             }
         }
     }

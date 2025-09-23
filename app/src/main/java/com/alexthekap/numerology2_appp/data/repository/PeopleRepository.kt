@@ -61,12 +61,12 @@ class PeopleRepository @Inject constructor(
     }
 
     override
-    fun filterByName(name: String): Single<List<PersonModel>> {
+    fun filterByName(name: String): Flowable<List<PersonModel>> {
         return peopleDao.getPeopleWithName("%$name%")
     }
 
     override
-    fun filterByNote(note: String): Single<List<PersonModel>> {
+    fun filterByNote(note: String): Flowable<List<PersonModel>> {
         return peopleDao.getPeopleWithNote("%$note%")
     }
 }

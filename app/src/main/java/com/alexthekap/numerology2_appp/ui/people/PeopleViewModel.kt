@@ -2,6 +2,7 @@ package com.alexthekap.numerology2_appp.ui.people
 
 import android.os.Bundle
 import android.util.Log
+import android.util.Pair
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,21 +25,24 @@ class PeopleViewModel @Inject constructor(
     private val repository: IPeopleRepository
 ) : ViewModel() {
 
+    private val TAG by lazy { this::class.java.simpleName }
     private val disposable = CompositeDisposable()
+    private val filterDisposable = CompositeDisposable()
+    private val peopleDisposable = CompositeDisposable()
 
-    private val TAG = this::class.java.simpleName
-    private val peopleLD = MutableLiveData<List<PersonModel>>()
-    private val searchTextLD = MutableLiveData< Pair<Int,String>? >()
+    private val peopleLD = MutableLiveData<List<PersonModel>?>()
+    private val searchTextLD = MutableLiveData< Pair<Int?, String>? >()
     private val sortedFavoriteLD = MutableLiveData(false)
 
     private fun getPeopleAndObserveDb() {
         repository.getPeopleAndObserveDB()
             .subscribeOn(Schedulers.io())
+            .onBackpressureLatest()
             .subscribe(
                 { onGetPeopleAndObserveDBSuccess(it) },
                 { Log.d(TAG, "getPeopleAndObserveDB: ${it.message}") }
             )
-            .also{ disposable.add(it) }
+            .also{ peopleDisposable.add(it) }
     }
 
     fun deleteAllFromDb() {
@@ -61,8 +65,10 @@ class PeopleViewModel @Inject constructor(
             .also{ disposable.add(it) }
     }
 
-    fun filterByName(name: String?, rID: Int) {
+    fun filterByName(name: String?, rID: Int?) {
         name ?: return
+        peopleDisposable.clear()
+        peopleLD.setValue(emptyList())
         repository.filterByName(name.trim())
             .subscribeOn(Schedulers.io())
             .subscribe(
@@ -73,11 +79,13 @@ class PeopleViewModel @Inject constructor(
                 },
                 { Log.d(TAG, "filterByName: ERROR ${it.message}")}
             )
-            .also{ disposable.add(it) }
+            .also{ filterDisposable.add(it) }
     }
 
     fun filterByNote(note: String?, rID: Int) {
         note ?: return
+        peopleDisposable.clear()
+        peopleLD.setValue(emptyList())
         repository.filterByNote(note.trim())
             .subscribeOn(Schedulers.io())
             .subscribe(
@@ -88,7 +96,7 @@ class PeopleViewModel @Inject constructor(
                 },
                 { Log.d(TAG, "filterByNote: ERROR ${it.message}")}
             )
-            .also{ disposable.add(it) }
+            .also{ filterDisposable.add(it) }
     }
 
     private fun onGetPeopleAndObserveDBSuccess(people: List<PersonModel>) {
@@ -112,6 +120,8 @@ class PeopleViewModel @Inject constructor(
     }
 
     fun reload() {
+        filterDisposable.clear()
+        peopleLD.setValue(emptyList())
         getPeopleAndObserveDb()
         searchTextLD.postValue( null )
     }
@@ -148,7 +158,7 @@ class PeopleViewModel @Inject constructor(
             .also{ disposable.add(it) }
     }
 
-    fun getPeopleLd(): LiveData<List<PersonModel>> {
+    fun getPeopleLd(): LiveData<List<PersonModel>?> {
         if (peopleLD.value == null) {
             getPeopleAndObserveDb()
         }
@@ -159,12 +169,14 @@ class PeopleViewModel @Inject constructor(
         return sortedFavoriteLD
     }
 
-    fun getSearchTextLd(): LiveData< Pair<Int,String>? > {
+    fun getSearchTextLd(): LiveData< Pair<Int?, String>? > {
         return searchTextLD
     }
 
     override
     fun onCleared() {
         disposable.clear()
+        filterDisposable.clear()
+        peopleDisposable.clear()
     }
 }

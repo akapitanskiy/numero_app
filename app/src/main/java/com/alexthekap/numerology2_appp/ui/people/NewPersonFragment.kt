@@ -3,10 +3,10 @@ package com.alexthekap.numerology2_appp.ui.people
 import android.content.Context
 import android.os.Bundle
 import android.os.IBinder
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.alexthekap.numerology2_appp.R
@@ -37,8 +37,19 @@ class NewPersonFragment : Fragment(R.layout.fragment_new_person) {
         initListeners()
     }
 
-    private fun initListeners() {
+    override
+    fun onResume() {
+        super.onResume()
+        if (b.noteEdittext.hasFocus()) {
+            Completable.fromAction{ Thread.sleep(300) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete{ b.scrollView.scrollTo(0, b.noteTitle.top) }
+                .subscribe()
+        }
+    }
 
+    private fun initListeners() {
         b.addPerson.setOnClickListener{
             b.datePicker.clearFocus()
             peopleViewModel.insertPerson(

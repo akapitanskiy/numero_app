@@ -3,6 +3,7 @@ package com.alexthekap.numerology2_appp.ui.people
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Pair
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -72,13 +73,15 @@ class PeopleListFragment : Fragment(R.layout.fragment_people_list) {
         adapter.submitList(people)
     }
 
+
     private fun handleSortedFavorite(sorted: Boolean?) {
         menuItemSorted?.isChecked = (sorted == true)
     }
 
-    private fun handleSearchText(pair: Pair<Int,String>? ) {
+    private fun handleSearchText(pair: Pair<Int?, String>? ) {
+        if (pair != null && pair.first == null) return
         title = if (pair == null) null
-                else getString(pair.first, pair.second)
+                else getString(pair.first!!, pair.second)
         (requireActivity() as MainActivity).supportActionBar?.setTitle( title )
     }
 
@@ -94,6 +97,7 @@ class PeopleListFragment : Fragment(R.layout.fragment_people_list) {
             ContextCompat.getDrawable(requireContext(), R.drawable.divider)?.let{ setDrawable(it) }
         })
         adapter = PersonAdapter()
+//        adapter.setHasStableIds(true)
         b.peopleRv.adapter = adapter
 
         swipeHandler.attachToRecyclerView(b.peopleRv)

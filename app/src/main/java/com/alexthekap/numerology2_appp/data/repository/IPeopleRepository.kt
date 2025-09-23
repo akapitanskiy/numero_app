@@ -27,7 +27,7 @@ interface IPeopleRepository {
 
     fun updateIsFavorite(id: Long, isFavorite: Boolean): Single<Int>
 
-    fun filterByName(name: String): Single<List<PersonModel>>
+    fun filterByName(name: String): Flowable<List<PersonModel>>
 
-    fun filterByNote(note: String): Single<List<PersonModel>>
+    fun filterByNote(note: String): Flowable<List<PersonModel>>
 }

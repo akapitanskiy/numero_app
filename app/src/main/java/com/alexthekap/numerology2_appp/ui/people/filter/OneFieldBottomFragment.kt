@@ -1,6 +1,8 @@
 package com.alexthekap.numerology2_appp.ui.people.filter
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -26,6 +28,7 @@ class OneFieldBottomFragment : BottomSheetDialogFragment(R.layout.fragment_one_f
     private val b get() = binding!!
     private lateinit var viewModel: PeopleViewModel
     private var filterType: Int? = null
+    private var buttonWasClicked = false
 
     override
     fun onCreate(savedInstanceState: Bundle?) {
@@ -53,33 +56,60 @@ class OneFieldBottomFragment : BottomSheetDialogFragment(R.layout.fragment_one_f
         when(filterType) {
             ARG_NAME_FILTER -> {
                 b.singleFieldTitle.setText(R.string.filter_by_name)
-                b.applyBtnSingleFieldFilter.setOnClickListener{
-                    val text = b.singleFieldText.text?.toString()
-                    val templateResID = R.string.filter_name_template
-                    viewModel.filterByName(text, templateResID)
-                    findNavController().navigate(
-                        R.id.peopleListFragmentId,
-                        Bundle().apply{
-                            putString( ARG_SEARCH_TEXT, getString(templateResID, text?.trim()) )
+                b.applyBtnSingleFieldFilter.setOnClickListener{ onApplyClickName() }
+                b.singleFieldText.addTextChangedListener(
+                    object : TextWatcher {
+                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+                        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+
+                        override fun afterTextChanged(s: Editable?) {
+                            viewModel.filterByName(s.toString(), null)
                         }
-                    )
-                }
+
+                    }
+                )
             }
             ARG_NOTE_FILTER -> {
                 b.singleFieldTitle.setText(R.string.filter_by_note)
-                b.applyBtnSingleFieldFilter.setOnClickListener{
-                    val text = b.singleFieldText.text?.toString()
-                    val templateResID = R.string.filter_note_template
-                    viewModel.filterByNote(text, templateResID)
-                    findNavController().navigate(
-                        R.id.peopleListFragmentId,
-                        Bundle().apply{
-                            putString( ARG_SEARCH_TEXT, getString(templateResID, text?.trim()) )
-                        }
-                    )
-                }
+                b.applyBtnSingleFieldFilter.setOnClickListener{ onApplyClickNote() }
             }
         }
+
+        if (!b.singleFieldText.hasFocus()) {
+            b.singleFieldText.requestFocus()
+        }
+    }
+
+    private fun onApplyClickName() {
+        buttonWasClicked = true
+        val text = b.singleFieldText.text?.toString()
+        val templateResID = R.string.filter_name_template
+        viewModel.filterByName(text, templateResID)
+        findNavController().navigate(
+            R.id.peopleListFragmentId,
+            Bundle().apply{
+                putString( ARG_SEARCH_TEXT, getString(templateResID, text?.trim()) )
+            }
+        )
+    }
+
+    private fun onApplyClickNote() {
+        buttonWasClicked = true
+        val text = b.singleFieldText.text?.toString()
+        val templateResID = R.string.filter_note_template
+        viewModel.filterByNote(text, templateResID)
+        findNavController().navigate(
+            R.id.peopleListFragmentId,
+            Bundle().apply{
+                putString( ARG_SEARCH_TEXT, getString(templateResID, text?.trim()) )
+            }
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (!buttonWasClicked)
+            viewModel.reload()
     }
 
     override

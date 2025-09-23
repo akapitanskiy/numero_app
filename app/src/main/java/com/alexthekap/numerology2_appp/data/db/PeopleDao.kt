@@ -46,8 +46,8 @@ interface PeopleDao {
     fun updateImg(imgByteArr: ByteArray?, id: Long): Single<Int>
 
     @Query("SELECT * FROM people_table WHERE personName LIKE :name ORDER BY dbId DESC")
-    fun getPeopleWithName(name: String): Single<List<PersonModel>>
+    fun getPeopleWithName(name: String): Flowable<List<PersonModel>>
 
     @Query("SELECT * FROM people_table WHERE note LIKE :note ORDER BY dbId DESC")
-    fun getPeopleWithNote(note: String): Single<List<PersonModel>>
+    fun getPeopleWithNote(note: String): Flowable<List<PersonModel>>
 }
