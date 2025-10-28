@@ -12,6 +12,8 @@
     <string name="note_filter">Filter by note</string>
     <string name="favorite_first">Favorite first</string>
     <string name="pythagorean_matrix">Pythagorean square</string>
+    <string name="birth_was_changed">Birth date changed</string>
+    <string name="full_years">%s yrs</string>
     <string name="no_numbers">\u2014</string>
     <string name="warning_delete_person">Person is about to be deleted</string>
     <string name="warning_delete_photo">Photo is about to be deleted</string>

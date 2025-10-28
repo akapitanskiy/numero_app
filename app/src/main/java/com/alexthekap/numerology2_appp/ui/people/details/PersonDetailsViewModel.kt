@@ -1,11 +1,11 @@
 package com.alexthekap.numerology2_appp.ui.people.details
 
 import android.content.Context
-import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -153,7 +153,7 @@ class PersonDetailsViewModel @Inject constructor(
                 return byteArrayOutputStream.toByteArray()
             }
         } catch (e: IOException) {
-            Log.e(TAG, "readBytes: ERROR", e)
+            Log.e(TAG, "readBytes(): ERROR", e)
         } finally {
             inputStream?.close()
             byteArrayOutputStream?.close()
@@ -177,7 +177,7 @@ class PersonDetailsViewModel @Inject constructor(
                 return orientation
             }
         } catch (e: IOException) {
-            Log.e(TAG, "readBytes: ERROR", e)
+            Log.e(TAG, "readOrientation(): ERROR", e)
         } finally {
             inputStream?.close()
         }

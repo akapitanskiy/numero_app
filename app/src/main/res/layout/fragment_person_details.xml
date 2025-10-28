@@ -24,8 +24,17 @@
         android:id="@+id/birthdayText"
         style="@style/Theme.AppTheme.DetailsTitle"
         android:text="@string/no_numbers"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@id/birthdayImg"
         app:layout_constraintStart_toEndOf="@id/birthdayImg"
+        app:layout_constraintEnd_toStartOf="@id/fullYearsText"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/fullYearsText"
+        style="@style/Theme.AppTheme.DetailsTitle"
+        app:layout_constraintBottom_toBottomOf="@id/birthdayImg"
+        app:layout_constraintStart_toEndOf="@id/birthdayText"
         app:layout_constraintEnd_toStartOf="@id/isFavoriteImg"
         />
 
@@ -135,13 +144,54 @@
         />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/dateCreatedImg"
+        style="@style/Theme.AppTheme.DetailsImg"
+        app:srcCompat="@drawable/ic_add_date"
+        app:layout_constraintTop_toBottomOf="@id/divider1"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dateCreatedText"
+        style="@style/Theme.AppTheme.DetailsTitle"
+        android:text="@string/no_numbers"
+        android:textSize="13sp"
+        android:letterSpacing="0"
+        app:layout_constraintBottom_toBottomOf="@id/dateCreatedImg"
+        app:layout_constraintStart_toEndOf="@id/dateCreatedImg"
+        app:layout_constraintEnd_toStartOf="@id/birthDateWasChanged"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/birthDateWasChanged"
+        style="@style/Theme.AppTheme.DetailsTitle"
+        android:textSize="13sp"
+        android:text="@string/birth_was_changed"
+        android:drawableEnd="@drawable/ic_alarm_on"
+        android:drawableTint="@color/gray_77"
+        android:gravity="bottom"
+        android:letterSpacing="0"
+        app:layout_constraintBottom_toBottomOf="@id/dateCreatedImg"
+        app:layout_constraintStart_toEndOf="@id/dateCreatedText"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/divider6"
+        style="@style/Theme.AppTheme.DividerDetails"
+        android:layout_width="match_parent"
+        app:srcCompat="@drawable/divider"
+        app:layout_constraintTop_toBottomOf="@id/dateCreatedImg"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/noteImg"
         style="@style/Theme.AppTheme.DetailsImg"
         android:scaleY="1.1"
         android:scaleX="1.2"
         app:srcCompat="@drawable/ic_pencil"
         app:tint="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/divider1"
+        app:layout_constraintTop_toBottomOf="@id/divider6"
         app:layout_constraintStart_toStartOf="parent"
         />
 
@@ -154,7 +204,7 @@
         android:text="@string/no_numbers"
         android:gravity="center_vertical"
         app:layout_constraintHeight_min="64dp"
-        app:layout_constraintTop_toBottomOf="@id/divider1"
+        app:layout_constraintTop_toBottomOf="@id/divider6"
         app:layout_constraintStart_toEndOf="@id/noteImg"
         app:layout_constraintEnd_toEndOf="parent"
         />

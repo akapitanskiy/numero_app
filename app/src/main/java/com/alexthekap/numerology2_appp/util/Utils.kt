@@ -1,6 +1,11 @@
 package com.alexthekap.numerology2_appp.util
 
+import android.os.Build
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -30,5 +35,28 @@ object Utils {
         return calendar.timeInMillis
     }
 
+    fun getAge(birthMillis: Long): Int {
+        val birthDate = Calendar.getInstance().apply{ timeInMillis = birthMillis }
+        val today = Calendar.getInstance()
 
+        var age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR)
+
+        if (today.get(Calendar.DAY_OF_YEAR) < birthDate.get(Calendar.DAY_OF_YEAR)) {
+            age--
+        }
+
+        return age
+    }
+
+    fun getAge2(birthMillis: Long): Int {
+        val birthDate = if (Build.VERSION.SDK_INT >= 26) {
+            Instant.ofEpochMilli(birthMillis)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+
+        return ChronoUnit.YEARS.between(birthDate, LocalDate.now()).toInt()
+    }
 }

@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.media.ExifInterface
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -21,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
+import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -99,6 +99,9 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
 
         b.noteText.setText(person.note)
         b.birthdayText.setText(Utils.longToStrDate(person.birthDate))
+        b.fullYearsText.setText( getString(R.string.full_years, Utils.getAge(person.birthDate).toString()) )
+        b.dateCreatedText.setText(Utils.longToStrDate(person.dateAddedMillis))
+        b.birthDateWasChanged.visibility = if (person.dateChangedBirthDate != null) View.VISIBLE else View.GONE
         b.chineseYearText.setText( ChineseYear.getChineseYear(person.birthDate).first )
         b.isFavoriteImg.setColorFilter(
             if (person.isFavorite)
@@ -114,11 +117,13 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
         if (person.img != null) {
             b.pictureImg.visibility = View.VISIBLE
 
-            if (person.imgOrientation == ExifInterface.ORIENTATION_NORMAL || person.imgOrientation == null) {
-                b.pictureImg.setImageBitmap( BitmapFactory.decodeByteArray(person.img, 0, person.img!!.size) )
-            } else {
+            val bitMapOriented = getBitmapOriented(person)
+            if (bitMapOriented != null) {
                 b.pictureImg.setImageBitmap( getBitmapOriented(person) )
+            } else if (person.imgOrientation == ExifInterface.ORIENTATION_NORMAL || person.imgOrientation == null) {
+                b.pictureImg.setImageBitmap( BitmapFactory.decodeByteArray(person.img, 0, person.img!!.size) )
             }
+
             b.addPicImg.visibility = View.GONE
         } else {
             b.addPicImg.visibility = View.VISIBLE
@@ -128,12 +133,13 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
         initListeners()
     }
 
-    private fun getBitmapOriented(person: PersonModel): Bitmap {
+    private fun getBitmapOriented(person: PersonModel): Bitmap? {
         val matrix = Matrix()
         when (person.imgOrientation) {
             ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
             ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
             ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+            else -> return null
         }
         val bitMapFromBytes = BitmapFactory.decodeByteArray(person.img, 0, person.img!!.size)
 
