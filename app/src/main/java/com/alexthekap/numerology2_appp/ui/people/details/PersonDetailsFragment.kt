@@ -39,7 +39,7 @@ import java.util.Calendar
 import javax.inject.Inject
 
 const val ARG_PERSON_DB_ID = "arg_person_dbId"
-const val ARG_PERSON_DB_NAME = "arg_person_name_from_db" // !dynamic arg name in nav_graph, DON'T change  иначе при скрытии BottomSheetDialog имя не сохраняется
+const val ARG_PERSON_DB_NAME = "arg_person_name_from_db" // !this is a dynamic arg name in nav_graph, DON'T change  иначе при скрытии BottomSheetDialog имя не сохраняется
 
 class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
 
@@ -237,7 +237,7 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
             .setPositiveButton(R.string.ok) { _, _ ->
                 detailsViewModel.removePhoto(dbId)
             }
-            .setNegativeButton("Cancel       ") { _, _ -> }
+            .setNegativeButton("Cancel      ") { _, _ -> }
 
         return builder
     }
