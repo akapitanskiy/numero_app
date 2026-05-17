@@ -1,6 +1,7 @@
 package com.alexthekap.numerology2_appp.ui.people.details
 
 import android.Manifest
+import android.animation.LayoutTransition
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -35,6 +36,9 @@ import com.alexthekap.numerology2_appp.ui.ViewModelFactory
 import com.alexthekap.numerology2_appp.util.ChineseYear
 import com.alexthekap.numerology2_appp.util.Utils
 import com.alexthekap.numerology2_appp.util.Zodiac
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -49,6 +53,7 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
     private val b get() = binding!!
     private lateinit var detailsViewModel: PersonDetailsViewModel
     private var dbId: Long? = null
+    private var hintVisible = false
     private var mPerson: PersonModel? = null
     private lateinit var activityResultGallery: ActivityResultLauncher<Intent>
 
@@ -78,6 +83,9 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
     override
     fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentPersonDetailsBinding.bind(view)
+
+        b.root.layoutTransition = LayoutTransition()
+        b.root.layoutTransition?.enableTransitionType(LayoutTransition.CHANGING)
 
         ComponentManager.getViewModelComponent().inject(this)
         detailsViewModel = ViewModelProvider(this, vmFactory).get(PersonDetailsViewModel::class.java)
@@ -218,6 +226,25 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
             onPictureLongClickDialog.show()
             return@setOnLongClickListener true
         }
+
+        b.dateCreatedImg.setOnClickListener( object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                if (hintVisible) return
+                b.dateCreatedHint.visibility = View.VISIBLE
+                hintVisible = true
+
+                Completable.fromAction{ Thread.sleep(3000) }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally {
+                        if (binding != null) {
+                            b.dateCreatedHint.visibility = View.GONE
+                        }
+                        hintVisible = false
+                    }
+                    .subscribe()
+            }
+        })
     }
 
     private fun checkPermission(): Boolean {

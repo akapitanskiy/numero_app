@@ -25,13 +25,13 @@ class AppModuleProvider(private val context: Context) {
             PeopleDatabase::class.java,
             PeopleDatabase.DB_FILE_NAME
         )
-            .fallbackToDestructiveMigration()
-            .build()
+        .fallbackToDestructiveMigration()
+        .build()
     }
 
     @Singleton
     @Provides
-    fun provideItunesDao(db: PeopleDatabase): PeopleDao {
+    fun providePeopleDao(db: PeopleDatabase): PeopleDao {
         return db.getPeopleDao()
     }
 
