@@ -188,6 +188,7 @@
         android:drawableTint="@color/gray_77"
         android:gravity="bottom"
         android:letterSpacing="0"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/dateCreatedImg"
         app:layout_constraintStart_toEndOf="@id/dateCreatedText"
         app:layout_constraintEnd_toEndOf="parent"

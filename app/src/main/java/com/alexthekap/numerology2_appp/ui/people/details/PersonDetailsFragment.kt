@@ -237,9 +237,7 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally {
-                        if (binding != null) {
-                            b.dateCreatedHint.visibility = View.GONE
-                        }
+                        b.dateCreatedHint.visibility = View.GONE
                         hintVisible = false
                     }
                     .subscribe()
@@ -286,9 +284,9 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
                             mPerson?.let{ putString(ARG_PERSON_NAME_EDIT, it.personName) }
                         } )
                     }
-                    return true
+                    return true // it should be just "true" without return
                 }
-                else -> false
+                else -> return false
             }
         }
     }
@@ -302,6 +300,11 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
     fun onDestroyView() {
         super.onDestroyView()
         detailsViewModel.resetPersonLD()
+    }
+
+    override
+    fun onDestroy() {
+        super.onDestroy()
         binding = null
     }
 }

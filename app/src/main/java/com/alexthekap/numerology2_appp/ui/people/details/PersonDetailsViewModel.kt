@@ -106,7 +106,7 @@ class PersonDetailsViewModel @Inject constructor(
         dbId ?: return
         val imageByteArray = readBytes(uri, context)
         if (imageByteArray != null && imageByteArray.size * 1.0F /1024/1024 > 3.99) {
-            Toast.makeText(App.inst.baseContext, R.string.image_too_big, Toast.LENGTH_LONG).show()
+            Toast.makeText(App.inst.baseContext, R.string.image_too_large_err, Toast.LENGTH_LONG).show()
             return
         }
         repository.updateImage(dbId, imageByteArray, readOrientation(uri, context))

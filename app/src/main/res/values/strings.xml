@@ -25,7 +25,7 @@
     <string name="filter_name_template">name: %s</string>
     <string name="filter_note_template">note: %s</string>
     <string name="insert_image_err">DB insert image error</string>
-    <string name="image_too_big">Image size\'s too big.\nMust not exceed 4MB</string>
-    <string name="date_created">Date created</string>
+    <string name="image_too_large_err">Image size too large.\nMust not exceed 4MB</string>
+    <string name="date_created">Date added</string>
 
 </resources>
