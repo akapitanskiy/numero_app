@@ -5,7 +5,6 @@
 
 .idea/*
 !.idea/runConfigurations/
-!.idea/misc.xml
 
 .DS_Store
 /build
