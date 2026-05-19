@@ -237,7 +237,7 @@ class PersonDetailsFragment : Fragment(R.layout.fragment_person_details) {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doFinally {
-                        b.dateCreatedHint.visibility = View.GONE
+                        binding?.let { b.dateCreatedHint.visibility = View.GONE }
                         hintVisible = false
                     }
                     .subscribe()
